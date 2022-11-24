@@ -70,7 +70,7 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.6.0/css/bootstrap.min.css" integrity="sha512-P5MgMn1jBN01asBgU0z60Qk4QxiXo86+wlFahKrsQf37c9cro517WzVSPPV1tDKzhku2iJ2FVgL67wG03SGnNA==" crossorigin="anonymous" referrerpolicy="no-referrer" />
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta2/css/all.min.css" integrity="sha512-YWzhKL2whUzgiheMoBFwW8CKV4qpHQAEuvilg9FAn5VJUDwKZZxkJNuGM4XkWuk94WCrrwslk8yWNGmY1EduTA==" crossorigin="anonymous" referrerpolicy="no-referrer" />
     <link rel="stylesheet" href="css/styles.css">
-    <title>Shopping cart</title>
+    <title>Online Palengke</title>
 </head>
 <body>
 <div class="container">
@@ -94,7 +94,7 @@
                 <div class="col-md-3 col-sm-6 mb-4">
                     <div class="product-grid2 card">                            
                         <div class="product-image2">
-                            <a href="signup_form.php?k=<?php echo $key; ?>">
+                            <a href="details.php?k=<?php echo $key; ?>">
                                 <img class="pic-1" src="img/<?php echo $product['photo1']; ?>">
                                 <img class="pic-2" src="img/<?php echo $product['photo2']; ?>">
                             </a>                        
