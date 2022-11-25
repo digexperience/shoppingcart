@@ -1,12 +1,14 @@
 <?php
     session_start();
- 
+    require_once('dataset.php');
+
     if(isset($_POST['btnProcess'])) {
 
         if(isset($_SESSION['cartItems'][$_POST['hdnKey']][$_POST['radSize']]))
-            $_SESSION['cartItems'][$_POST['hdnKey']][$_POST['radSize']] += $_POST['txtQuantity'];
+            $_SESSION['cartItems'][$_POST['hdnKey']][$_POST['radSize']] += $_POST['txtQuantity']; // if you already purchased this item
         else
-            $_SESSION['cartItems'][$_POST['hdnKey']][$_POST['radSize']] = $_POST['txtQuantity'];
+            $_SESSION['cartItems'][$_POST['hdnKey']][$_POST['radSize']] = $_POST['txtQuantity']; // if this is the first time you purchased the item
+
         $_SESSION['totalQuantity'] += $_POST['txtQuantity'];
         header("location: confirm.php");
     }
@@ -21,7 +23,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.6.0/css/bootstrap.min.css" integrity="sha512-P5MgMn1jBN01asBgU0z60Qk4QxiXo86+wlFahKrsQf37c9cro517WzVSPPV1tDKzhku2iJ2FVgL67wG03SGnNA==" crossorigin="anonymous" referrerpolicy="no-referrer" />
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta2/css/all.min.css" integrity="sha512-YWzhKL2whUzgiheMoBFwW8CKV4qpHQAEuvilg9FAn5VJUDwKZZxkJNuGM4XkWuk94WCrrwslk8yWNGmY1EduTA==" crossorigin="anonymous" referrerpolicy="no-referrer" />
-    <link rel="stylesheet" href="css/styles.css">
+    <link rel="stylesheet" href="styles.css">
     <title>Learn IT Easy Online Shop | Shopping Cart</title>
 </head>
 <body>
@@ -29,7 +31,7 @@
         <div class="container">
             <div class="row mt-5">
                 <div class="col-10">
-                    <h1><i class="fa fa-store"></i> Learn IT Easy Online Shop</h1>
+                    <h1><i class="fa fa-store"></i>Easy Learn It Shop</h1>
                 </div>
                 <div class="col-2 text-right">
                     <a href="cart.php" class="btn btn-primary">
@@ -78,9 +80,9 @@
                         <input type="number" name="txtQuantity" id="txtQuantity" class="form-control" placeholder="0" min="1" max="100" required>
                         <br>
                         <button type="submit" name="btnProcess" class="btn btn-dark btn-lg"><i class="fa fa-check-circle"></i> Confirm Product Purchase</button>
-                        <a href="/shopping-cart/" class="btn btn-danger btn-lg"><i class="fa fa-arrow-left"></i> Cancel / Go Back</a>
+                        <a href="index.php" class="btn btn-danger btn-lg"><i class="fa fa-arrow-left"></i> Cancel / Go Back</a>
                     </div>                                
-                <?php else: ?>
+                    <?php else: ?>
                     <div class="col-12 card p-5">
                         <h3 class="text-center text-danger">No Product Found!</h3>
                     </div>
