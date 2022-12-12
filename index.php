@@ -16,10 +16,14 @@
 <body>
     <div class="container">
         <div class="row mt-5">
-            <div class="col-10">
+            <div class="col-8">
                 <h1><i class="fa fa-store"></i>Easy Learn It Shop</h1>
             </div>
-            <div class="col-2 text-right">
+
+            <div class="col-4 text-right">
+                <a href="logout.php">
+                <span class="link-light mx-1"><a href="logout.php">Log out</a></span>
+                </a>
                 <a href="cart.php" class="btn btn-primary">
                     <i class="fa fa-shopping-cart"></i> Cart
                     <span class="badge badge-light">                        
@@ -31,41 +35,53 @@
         <hr>
 
         <div class="row">
-            <?php if(isset($arrProducts)): ?>
-                <?php foreach($arrProducts as $key => $product): ?>
-                    <div class="col-md-3 col-sm-6 mb-4">
-                        <div class="product-grid2 card">
-                            <div class="product-image2">
-                                <a href="details.php?k=<?php echo $key; ?>">
-                                    <img class="pic-1" src="img/<?php echo $product['photo1']; ?>">
-                                    <img class="pic-2" src="img/<?php echo $product['photo2']; ?>">
-                                </a>                        
-                                <a class="add-to-cart" href="details.php?k=<?php echo $key; ?>"><i class="fa fa-cart-plus"></i> Add to cart</a>
-                            </div>
-                            <div class="product-content">
-                                <h3 class="title">
-                                    <?php echo $product['name']; ?>
-                                    <span class="badge badge-dark">₱ <?php echo $product['price']; ?></span>
-                                </h3>
+            <?php
+            require ('open-connection.php');
+            $strSql = "SELECT * FROM tbl_products ORDER BY id";
+
+                if($rsProducts = mysqli_query($con, $strSql)):?>
+                    <?php if(mysqli_num_rows($rsProducts)>0):?>
+                
+                        <?php foreach($rsProducts as $key => $product): ?>
+                            <?php foreach($rsProducts as $key => $recProducts): ?>
+                            <div class="col-md-3 col-sm-6 mb-4">
+                                <div class="product-grid2 card">
+                                    <div class="product-image2">
+                                        <a href="details.php?k=<?php echo $key; ?>">
+                                            <img class="pic-1" src="img/<?php echo $product['photo1']; ?>">
+                                            <img class="pic-2" src="img/<?php echo $product['photo2']; ?>">
+                                        </a>                        
+                                        <a class="add-to-cart" href="details.php?k=<?php echo $key; ?>"><i class="fa fa-cart-plus"></i> Add to cart</a>
+                                    </div>
+                                    <?php else:header('location:static-login.php'); ?>
+                                <?php endif; ?>
+                                <div class="product-content">
+                                    <h3 class="title">
+                                        <?php echo $recProducts['name']; ?>
+                                        <span class="badge badge-dark">₱ <?php echo $recProducts['price']; ?></span>
+                                    </h3>
+                                </div>
                             </div>
                         </div>
+                    <?php endforeach; ?>
+                    <?php mysqli_free_result($rsProducts); ?>
+                <?php else: ?>
+                    <div class="col-12 card p-5">
+                        <h3 class="text-center text-danger">No Product Found!</h3>
                     </div>
-                <?php endforeach; ?>
-            <?php else: ?>
-                <div class="col-12 card p-5">
-                    <h3 class="text-center text-danger">No Product Found!</h3>
-                </div>
+                <?php endif; ?>
+                <?php require ('close-connection.php');?>
             <?php endif; ?>
         </div>
     </div>
-    
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js" integrity="sha512-894YE6QWD5I59HgZOGReFYm4dnWc1Qt5NtvYSaNcOP+u1T9qYdvdihz0PPSiiqn/+/3e7Jo4EaG7TubfWGUrMQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.6.0/js/bootstrap.bundle.min.js" integrity="sha512-wV7Yj1alIZDqZFCUQJy85VN+qvEIly93fIQAN7iqDFCPEucLCeNFz4r35FCo9s6WrpdDQPi80xbljXB8Bjtvcg==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
-</body>
-</html>
-Footer
-© 2022 GitHub, Inc.
-Footer navigation
-Terms
-Privacy
-Security
+            
+            <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js" integrity="sha512-894YE6QWD5I59HgZOGReFYm4dnWc1Qt5NtvYSaNcOP+u1T9qYdvdihz0PPSiiqn/+/3e7Jo4EaG7TubfWGUrMQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+            <script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.6.0/js/bootstrap.bundle.min.js" integrity="sha512-wV7Yj1alIZDqZFCUQJy85VN+qvEIly93fIQAN7iqDFCPEucLCeNFz4r35FCo9s6WrpdDQPi80xbljXB8Bjtvcg==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+        </body>
+        </html>
+        Footer
+        © 2022 GitHub, Inc.
+        Footer navigation
+        Terms
+        Privacy
+        Security
