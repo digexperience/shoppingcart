@@ -1,13 +1,46 @@
 <?php
     session_start();
+          
+    if(isset($_GET['k'])){
+        $_SESSION['k'] = $_GET['k'];
+    }
+            
+    require ('open-connection.php');
+    $strSql= "SELECT * FROM tbl_products WHERE id = ".$_SESSION['k'];
+    
+
+    if($rsProducts = mysqli_query($con, $strSql)){
+        if(mysqli_num_rows($rsProducts) > 0){
+           ($recProducts = mysqli_fetch_array($rsProducts));
+               mysqli_free_result($rsProducts);
+               }
+        else{
+            echo '<tr>';
+                echo '<td   No Record Found!</td>';
+            echo '</tr>';
+                }
+    }
+
+    else{
+        echo 'ERROR: Could not execute your request.';
+    }
 
     if(isset($_POST['btnProcess'])) {
+        // the stucture of our session cartItems goes like this
+        // $_SESSION['cartItems'][key][size] = quantity
+        // it is a two dimensional array where the first index denotes the key/number/id of the specific record (array/items)
+        // followed by the size of that particular item as the second index
+        // the value to be stored is nothing other than the quantity which denotes how many pieces did the buyer purchased for that product and for that specific size
+        // if it is the first time that the item is placed then we will not find that array signature so we create that array structure then store the quantity in it
+        // otherwise we add the new quantity from the previous quantity
 
         if(isset($_SESSION['cartItems'][$_POST['hdnKey']][$_POST['radSize']]))
             $_SESSION['cartItems'][$_POST['hdnKey']][$_POST['radSize']] += $_POST['txtQuantity']; // if you already purchased this item
         else
             $_SESSION['cartItems'][$_POST['hdnKey']][$_POST['radSize']] = $_POST['txtQuantity']; // if this is the first time you purchased the item
 
+        // then we compute the total quantity based on the new number of quantity being purchased
+        // then we force redirect to the confirm file in order to notify the user on a successfull purchase
         $_SESSION['totalQuantity'] += $_POST['txtQuantity'];
         header("location: confirm.php");
     }
@@ -22,7 +55,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.6.0/css/bootstrap.min.css" integrity="sha512-P5MgMn1jBN01asBgU0z60Qk4QxiXo86+wlFahKrsQf37c9cro517WzVSPPV1tDKzhku2iJ2FVgL67wG03SGnNA==" crossorigin="anonymous" referrerpolicy="no-referrer" />
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta2/css/all.min.css" integrity="sha512-YWzhKL2whUzgiheMoBFwW8CKV4qpHQAEuvilg9FAn5VJUDwKZZxkJNuGM4XkWuk94WCrrwslk8yWNGmY1EduTA==" crossorigin="anonymous" referrerpolicy="no-referrer" />
-    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="css/style.css">
     <title>Learn IT Easy Online Shop | Shopping Cart</title>
 </head>
 <body>
@@ -30,7 +63,7 @@
         <div class="container">
             <div class="row mt-5">
                 <div class="col-10">
-                    <h1><i class="fa fa-store"></i>Easy Learn It Shop</h1>
+                    <h1><i class="fa fa-store"></i> Learn IT Easy Online Shop</h1>
                 </div>
                 <div class="col-2 text-right">
                     <a href="cart.php" class="btn btn-primary">
@@ -44,23 +77,22 @@
             <hr>
 
             <div class="row">
-                <?php if(isset($_GET['k']) && isset($arrProducts[$_GET['k']])): ?>
                     <div class="col-md-4 col-sm-6 mb-4">
                         <div class="product-grid2 card">
                             <div class="product-image2">
                                 <a href="">
-                                    <img class="pic-1" src="img/<?php echo $arrProducts[$_GET['k']]['photo1']; ?>">
-                                    <img class="pic-2" src="img/<?php echo $arrProducts[$_GET['k']]['photo2']; ?>">
+                                    <img class="pic-1" src="img/<?php echo $recProducts['photo1']; ?>">
+                                    <img class="pic-2" src="img/<?php echo $recProducts['photo2']; ?>">
                                 </a>                            
                             </div>                        
                         </div>
                     </div>                
                     <div class="col-md-8 col-sm-6 mb-4">                
                         <h3 class="title">
-                            <?php echo $arrProducts[$_GET['k']]['name']; ?>
-                            <span class="badge badge-dark">₱ <?php echo $arrProducts[$_GET['k']]['price']; ?></span>
+                            <?php echo $recProducts['name']; ?>
+                            <span class="badge badge-dark">₱ <?php echo $recProducts['price']; ?></span>
                         </h3>
-                        <p><?php echo $arrProducts[$_GET['k']]['description']; ?></p>                    
+                        <p><?php echo $recProducts['description']; ?></p>                    
                         <hr>
                         <input type="hidden" name="hdnKey" value="<?php echo $_GET['k']; ?>">
                         <h3 class="title">Select Size:</h3>
@@ -81,11 +113,6 @@
                         <button type="submit" name="btnProcess" class="btn btn-dark btn-lg"><i class="fa fa-check-circle"></i> Confirm Product Purchase</button>
                         <a href="index.php" class="btn btn-danger btn-lg"><i class="fa fa-arrow-left"></i> Cancel / Go Back</a>
                     </div>                                
-                    <?php else: ?>
-                    <div class="col-12 card p-5">
-                        <h3 class="text-center text-danger">No Product Found!</h3>
-                    </div>
-                <?php endif; ?>
             </div>
         </div>
     </form>
